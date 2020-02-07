@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+	<title>Group Chat</title>
+</head>
+<body>
+	<header class="site-header">
+      	<nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        	<div class="container">
+        		<h3 class="text-center text-white pt-2 pb-2">Group Chat</h3>
+				<div class="navbar-nav">
+					<a class="nav-item nav-link" href="{{ url_for('logout') }}" data-toggle="modal" data-target="#logoutModal">Logout</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+	 
+	{% for messages in message %}
+		<div class="col-md-6">
+			<span class="h6">{{ messages.author.username }}</span> - <span class="h3">{{ messages.content }}</span>
+		</div>
+	{% endfor %}
+	<div class="col-md-6">
+		<form method="POST", action="{{ url_for('chat_new') }}">
+	        <div class="form-group">
+	        	<small>{{ form.content.label(class="form-control-label") }}</small>
+	            {% if form.content.errors %}
+	              {{ form.content(class="form-control form-control-lg is-invalid") }}
+	            	<div class="invalid-feedback">
+	                	{% for errors in form.content.errors %}
+	                  		<span>{{ error }}</span>
+	                	{% endfor %}
+	            	</div>
+	            {% else %}
+	            	{{ form.content(class="form-control form-control-lg") }}
+	            {% endif %}
+	        </div>
+	        <div class="form-group">
+	            {{ form.submit(class="btn btn-outline-info") }}
+	        </div>
+    	</form>
+	</div>
+
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="logoutModalLabel">Are you sure you want to Log Out?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <form action="{{ url_for('logout') }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Log Out">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
+
+
